@@ -2,15 +2,25 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
+	ep "github.com/PeterHickman/expand_path"
+	"github.com/PeterHickman/toolbox"
 	"io"
-	"log"
+	"os"
 	"strings"
 )
 
-func first_read_of_the_date(in string) (int, [][]string) {
-	r := csv.NewReader(strings.NewReader(in))
-	r.Comma = ','
+var delimiter = ','
+
+func dropdead(message string) {
+	fmt.Println(message)
+	os.Exit(1)
+}
+
+func first_read_of_the_date(in io.Reader) (int, [][]string) {
+	r := csv.NewReader(in)
+	r.Comma = delimiter
 
 	number_of_fields := 0
 	records := [][]string{}
@@ -22,7 +32,7 @@ func first_read_of_the_date(in string) (int, [][]string) {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			dropdead(fmt.Sprintf("%s", err))
 		}
 
 		if number_of_fields < len(record) {
@@ -50,16 +60,37 @@ func field_widths(records [][]string, number_of_fields int) []int {
 	return widths
 }
 
-func main() {
-	in := `first_name,last_name,username
-"Rob","Pike",rob
-Ken,Thompson,ken
-"Robert","Griesemer","gri"
-`
-	number_of_fields, records := first_read_of_the_date(in)
+func open_reader() io.Reader {
+	var in io.Reader
 
-	widths := field_widths(records, number_of_fields)
+	switch len(flag.Args()) {
+	case 0:
+		in = os.Stdin
+	case 1:
+		var err error
+		var filename string
+		filename, err = ep.ExpandPath(flag.Arg(0))
 
+		if err != nil {
+			dropdead(fmt.Sprintf("Unable to read %s, %s\n", flag.Arg(0), err))
+		}
+
+		if !toolbox.FileExists(filename) {
+			dropdead(fmt.Sprintf("Unable to read %s\n", filename))
+		}
+
+		in, err = os.Open(filename)
+		if err != nil {
+			dropdead(fmt.Sprintf("Unable to read %s, %s\n", flag.Arg(0), err))
+		}
+	default:
+		dropdead("Supply one one file as an argument")
+	}
+
+	return in
+}
+
+func write_table(records [][]string, number_of_fields int, widths []int) {
 	// Output the records
 	for ri, record := range records {
 		s := "|"
@@ -79,4 +110,30 @@ Ken,Thompson,ken
 			fmt.Println(s)
 		}
 	}
+}
+
+func init() {
+	d := flag.String("delimit", ",", "The character that delimit the columns")
+
+	flag.Parse()
+
+	if *d == "\\t" {
+		*d = fmt.Sprint("\t")
+	}
+
+	if len(*d) > 1 {
+		dropdead(fmt.Sprintf("Column delimiter should be a single character [%s]\n", *d))
+	}
+
+	delimiter = []rune(*d)[0]
+}
+
+func main() {
+	in := open_reader()
+
+	number_of_fields, records := first_read_of_the_date(in)
+
+	widths := field_widths(records, number_of_fields)
+
+	write_table(records, number_of_fields, widths)
 }
