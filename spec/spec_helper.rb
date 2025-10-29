@@ -8,7 +8,9 @@ end
 
 def exec(cmd)
   system(cmd)
-  $?.to_s.split(/\s+/).last.to_i
+  s = $?.to_s.split(/\s+/).last.to_i
+
+  expect(s).to eq(0), "should run without error, got #{s}"
 end
 
 def contents_the_same

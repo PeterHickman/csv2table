@@ -17,8 +17,7 @@ describe 'convert csv data' do
     context 'from stdio' do
       context 'with the defaults' do
         it 'creates the table' do
-          s = exec('cat ./spec/data.csv | ./csv2table > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('cat ./spec/data.csv | ./csv2table > ./output.txt')
 
           contents_the_same
         end
@@ -26,8 +25,7 @@ describe 'convert csv data' do
 
       context 'delimiter is ,' do
         it 'creates the table' do
-          s = exec('cat ./spec/data.csv | ./csv2table -delimit , > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('cat ./spec/data.csv | ./csv2table -delimit , > ./output.txt')
 
           contents_the_same
         end
@@ -35,8 +33,7 @@ describe 'convert csv data' do
 
       context 'delimiter is tab' do
         it 'creates the table' do
-          s = exec('cat ./spec/data.tsv | ./csv2table -delimit "\t" > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('cat ./spec/data.tsv | ./csv2table -delimit "\t" > ./output.txt')
 
           contents_the_same
         end
@@ -46,8 +43,7 @@ describe 'convert csv data' do
     context 'as argument' do
       context 'with the defaults' do
         it 'creates the table' do
-          s = exec('./csv2table ./spec/data.csv > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('./csv2table ./spec/data.csv > ./output.txt')
 
           contents_the_same
         end
@@ -55,8 +51,7 @@ describe 'convert csv data' do
 
       context 'delimiter is ,' do
         it 'creates the table' do
-          s = exec('./csv2table -delimit , ./spec/data.csv > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('./csv2table -delimit , ./spec/data.csv > ./output.txt')
 
           contents_the_same
         end
@@ -64,8 +59,7 @@ describe 'convert csv data' do
 
       context 'delimiter is tab' do
         it 'creates the table' do
-          s = exec('./csv2table -delimit "\t" ./spec/data.tsv > ./output.txt')
-          expect(s).to eq(0), "csv2table should run without error, got #{s}"
+          exec('./csv2table -delimit "\t" ./spec/data.tsv > ./output.txt')
 
           contents_the_same
         end
