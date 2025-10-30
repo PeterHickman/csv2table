@@ -12,6 +12,7 @@ import (
 )
 
 var delimiter = ','
+var output = "unset"
 
 func dropdead(message string) {
 	fmt.Println(message)
@@ -91,7 +92,6 @@ func open_reader() io.Reader {
 }
 
 func write_table(records [][]string, number_of_fields int, widths []int) {
-	// Output the records
 	for ri, record := range records {
 		s := "|"
 		for i := 0; i < number_of_fields; i++ {
@@ -112,20 +112,64 @@ func write_table(records [][]string, number_of_fields int, widths []int) {
 	}
 }
 
+func write_md(records [][]string) {
+	for ri, record := range records {
+		s := "|" + strings.Join(record, "|") + "|"
+		fmt.Println(s)
+
+		if ri == 0 {
+			s := "|" + strings.Repeat("---|", len(record))
+			fmt.Println(s)
+		}
+	}
+}
+
 func init() {
 	d := flag.String("delimit", ",", "The character that delimit the columns")
+	t := flag.Bool("table", false, "Format the output as an ascii table")
+	m := flag.Bool("md", false, "Format the output as markdown")
+	j := flag.Bool("json", false, "Format the output as json")
 
 	flag.Parse()
 
+	// Sort out the delimiter
 	if *d == "\\t" {
-		*d = fmt.Sprint("\t")
+		*d = "\t"
 	}
 
 	if len(*d) > 1 {
-		dropdead(fmt.Sprintf("Column delimiter should be a single character [%s]\n", *d))
+		dropdead(fmt.Sprintf("Column delimiter should be a single character [%s]", *d))
 	}
 
 	delimiter = []rune(*d)[0]
+
+	if *t {
+		if output != "unset" {
+			dropdead(fmt.Sprintf("The format is already set to %s", output))
+		} else {
+			output = "table"
+		}
+	}
+
+	if *m {
+		if output != "unset" {
+			dropdead(fmt.Sprintf("The format is already set to %s", output))
+		} else {
+			output = "md"
+		}
+	}
+
+	if *j {
+		if output != "unset" {
+			dropdead(fmt.Sprintf("The format is already set to %s", output))
+		} else {
+			output = "json"
+		}
+	}
+
+	if output == "unset" {
+		output = "table"
+	}
 }
 
 func main() {
@@ -133,7 +177,15 @@ func main() {
 
 	number_of_fields, records := first_read_of_the_date(in)
 
-	widths := field_widths(records, number_of_fields)
-
-	write_table(records, number_of_fields, widths)
+	switch output {
+	case "table":
+		widths := field_widths(records, number_of_fields)
+		write_table(records, number_of_fields, widths)
+	case "md":
+		write_md(records)
+	case "json":
+		println("TODO: json")
+	default:
+		dropdead(fmt.Sprintf("output is set to %s???", output))
+	}
 }
