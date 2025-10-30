@@ -12,3 +12,5 @@ $ cat data.csv | csv2table
 ```
 
 Rather than adding it to dozens of other applications
+
+By default the delimiter is a `,` but if you need to change it pass `--delimit '\t'` to use a tab for example
