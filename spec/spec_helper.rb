@@ -13,8 +13,8 @@ def exec(cmd)
   expect(s).to eq(0), "should run without error, got #{s}"
 end
 
-def contents_the_same
-  expected = File.read('./spec/data.txt')
+def contents_the_same(filename)
+  expected = File.read("./spec/#{filename}")
   actual   = File.read('./output.txt')
 
   expect(expected).to eq(actual), 'The output does not match'
