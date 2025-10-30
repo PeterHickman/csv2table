@@ -14,3 +14,23 @@ $ cat data.csv | csv2table
 Rather than adding it to dozens of other applications
 
 By default the delimiter is a `,` but if you need to change it pass `--delimit '\t'` to use a tab for example
+
+The default output is the ascii table seen above, by adding `--table` we can be explicit about it. If you want markdown output use `--md`
+
+```bash
+$ csvtable --md data.csv
+|first_name|last_name|username|
+|---|---|---|
+|Rob|Pike|rob|
+|Ken|Thompson|ken|
+|Robert|Griesemer|gri|
+```
+
+Or ...
+
+|first_name|last_name|username|
+|---|---|---|
+|Rob|Pike|rob|
+|Ken|Thompson|ken|
+|Robert|Griesemer|gri|
+
