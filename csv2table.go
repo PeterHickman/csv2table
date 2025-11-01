@@ -20,11 +20,10 @@ func dropdead(message string) {
 	os.Exit(1)
 }
 
-func first_read_of_the_date(in io.Reader) (int, [][]string) {
+func first_read_of_the_date(in io.Reader) [][]string {
 	r := csv.NewReader(in)
 	r.Comma = delimiter
 
-	number_of_fields := 0
 	records := [][]string{}
 
 	// Read all the data in and find the number of fields
@@ -37,19 +36,14 @@ func first_read_of_the_date(in io.Reader) (int, [][]string) {
 			dropdead(fmt.Sprintf("%s", err))
 		}
 
-		if number_of_fields < len(record) {
-			number_of_fields = len(record)
-		}
-
 		records = append(records, record)
 	}
 
-	return number_of_fields, records
+	return records
 }
 
-func field_widths(records [][]string, number_of_fields int) []int {
-	// Find the maximum width of each field
-	widths := make([]int, number_of_fields)
+func field_widths(records [][]string) []int {
+	widths := make([]int, len(records[0]))
 
 	for _, record := range records {
 		for i := 0; i < len(record); i++ {
@@ -92,7 +86,11 @@ func open_reader() io.Reader {
 	return in
 }
 
-func write_table(records [][]string, number_of_fields int, widths []int) {
+func write_table(records [][]string) {
+	widths := field_widths(records)
+
+	number_of_fields := len(records[0])
+
 	for ri, record := range records {
 		s := "|"
 		for i := 0; i < number_of_fields; i++ {
@@ -127,26 +125,17 @@ func write_md(records [][]string) {
 
 func is_int(value string) bool {
 	_, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func is_float(value string) bool {
 	_, err := strconv.ParseFloat(value, 64)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func has_quotes(value string) bool {
 	i := strings.Index(value, "\"")
-	if i == -1 {
-		return false
-	}
-	return true
+	return i != -1
 }
 
 func embed_quotes(value string) string {
@@ -262,12 +251,11 @@ func init() {
 func main() {
 	in := open_reader()
 
-	number_of_fields, records := first_read_of_the_date(in)
+	records := first_read_of_the_date(in)
 
 	switch output {
 	case "table":
-		widths := field_widths(records, number_of_fields)
-		write_table(records, number_of_fields, widths)
+		write_table(records)
 	case "md":
 		write_md(records)
 	case "json":
