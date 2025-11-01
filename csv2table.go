@@ -8,6 +8,7 @@ import (
 	"github.com/PeterHickman/toolbox"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -124,6 +125,92 @@ func write_md(records [][]string) {
 	}
 }
 
+func is_int(value string) bool {
+	_, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func is_float(value string) bool {
+	_, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func has_quotes(value string) bool {
+	i := strings.Index(value, "\"")
+	if i == -1 {
+		return false
+	}
+	return true
+}
+
+func embed_quotes(value string) string {
+	var new_value []byte
+
+	new_value = append(new_value, '"')
+
+	for i := 0; i < len(value); i++ {
+		if value[i] == '"' {
+			new_value = append(new_value, '\\')
+		}
+		new_value = append(new_value, value[i])
+	}
+
+	new_value = append(new_value, '"')
+
+	return string(new_value)
+}
+
+func format_value(value string) string {
+	lower_value := strings.ToLower(value)
+
+	if lower_value == "true" || lower_value == "false" {
+		return lower_value
+	} else if lower_value == "nil" || lower_value == "null" {
+		return "null"
+	} else if is_int(lower_value) || is_float(lower_value) {
+		return lower_value
+	} else if has_quotes(value) {
+		return embed_quotes(value)
+	} else {
+		return fmt.Sprintf("\"%s\"", value)
+	}
+}
+
+func write_json(records [][]string) {
+	last_record_index := len(records) - 1
+	last_field_index := len(records[0]) - 1
+
+	fmt.Println("[")
+
+	for ri, record := range records {
+		if ri != 0 {
+			fmt.Println("  {")
+
+			for i, value := range record {
+				if i == last_field_index {
+					fmt.Printf("    \"%s\": %s\n", records[0][i], format_value(value))
+				} else {
+					fmt.Printf("    \"%s\": %s,\n", records[0][i], format_value(value))
+				}
+			}
+
+			if ri == last_record_index {
+				fmt.Println("  }")
+			} else {
+				fmt.Println("  },")
+			}
+		}
+	}
+
+	fmt.Println("]")
+}
+
 func init() {
 	d := flag.String("delimit", ",", "The character that delimit the columns")
 	t := flag.Bool("table", false, "Format the output as an ascii table")
@@ -184,7 +271,7 @@ func main() {
 	case "md":
 		write_md(records)
 	case "json":
-		println("TODO: json")
+		write_json(records)
 	default:
 		dropdead(fmt.Sprintf("output is set to %s???", output))
 	}
