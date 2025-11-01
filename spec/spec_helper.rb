@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
+require 'English'
+
 def build_program
-  system("go build csv2table.go")
+  system('go build csv2table.go')
 end
 
 def remove_file(filename)
@@ -8,7 +12,7 @@ end
 
 def exec(cmd)
   system(cmd)
-  s = $?.to_s.split(/\s+/).last.to_i
+  s = $CHILD_STATUS.to_s.split(/\s+/).last.to_i
 
   expect(s).to eq(0), "should run without error, got #{s}"
 end
