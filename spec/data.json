@@ -1,0 +1,42 @@
+[
+  {
+    "data_type": "This is a simple string",
+    "value": "a simple string"
+  },
+  {
+    "data_type": "A single word",
+    "value": "word"
+  },
+  {
+    "data_type": "This is true",
+    "value": true
+  },
+  {
+    "data_type": "This is false",
+    "value": false
+  },
+  {
+    "data_type": "This is an empty string",
+    "value": ""
+  },
+  {
+    "data_type": "This is null",
+    "value": null
+  },
+  {
+    "data_type": "This is a number",
+    "value": 123
+  },
+  {
+    "data_type": "This is also a number",
+    "value": -123
+  },
+  {
+    "data_type": "This is number",
+    "value": 1.23
+  },
+  {
+    "data_type": "This is also number",
+    "value": -1.23
+  }
+]

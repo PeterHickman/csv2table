@@ -1,0 +1,11 @@
+data_type	value
+This is a simple string	a simple string
+A single word	word
+This is true	true
+This is false	false
+This is an empty string	
+This is null	NULL
+This is a number	123
+This is also a number	-123
+This is number	1.23
+This is also number	-1.23
