@@ -1,5 +1,7 @@
-|first_name|last_name|username|
-|---|---|---|
-|Rob|Pike|rob|
-|Ken|Thompson|ken|
-|Robert|Griesemer|gri|
+|type_of_field|value|
+|---|---|
+|a word|work|
+|several words|this is also a sentence|
+|true|true|
+|false|false|
+|null|null|

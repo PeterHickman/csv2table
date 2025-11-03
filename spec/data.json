@@ -1,42 +1,22 @@
 [
   {
-    "data_type": "This is a simple string",
-    "value": "a simple string"
+    "type_of_field": "a word",
+    "value": "work"
   },
   {
-    "data_type": "A single word",
-    "value": "word"
+    "type_of_field": "several words",
+    "value": "this is also a sentence"
   },
   {
-    "data_type": "This is true",
+    "type_of_field": true,
     "value": true
   },
   {
-    "data_type": "This is false",
+    "type_of_field": false,
     "value": false
   },
   {
-    "data_type": "This is an empty string",
-    "value": ""
-  },
-  {
-    "data_type": "This is null",
+    "type_of_field": null,
     "value": null
-  },
-  {
-    "data_type": "This is a number",
-    "value": 123
-  },
-  {
-    "data_type": "This is also a number",
-    "value": -123
-  },
-  {
-    "data_type": "This is number",
-    "value": 1.23
-  },
-  {
-    "data_type": "This is also number",
-    "value": -1.23
   }
 ]
