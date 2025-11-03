@@ -14,6 +14,7 @@ describe 'table output' do
   after :each do
     remove_file('output.txt')
   end
+
   context 'from stdio' do
     context 'with the defaults' do
       it 'creates the table' do
