@@ -1,9 +1,9 @@
-# csv2table
+# csv2
 
 A pipe function that converts a csv file into text table
 
 ```bash
-$ cat data.csv | csv2table
+$ cat data.csv | csv2
 | first_name | last_name | username |
 +------------+-----------+----------+
 | Rob        | Pike      | rob      |
