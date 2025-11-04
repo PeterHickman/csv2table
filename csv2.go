@@ -23,6 +23,7 @@ func dropdead(message string) {
 func first_read_of_the_date(in io.Reader) [][]string {
 	r := csv.NewReader(in)
 	r.Comma = delimiter
+	r.Comment = '#'
 
 	records := [][]string{}
 
