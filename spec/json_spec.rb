@@ -8,7 +8,7 @@ describe 'json output' do
   end
 
   after :all do
-    remove_file('csv2table')
+    remove_file('csv2')
   end
 
   after :each do
@@ -18,7 +18,7 @@ describe 'json output' do
   context 'from stdio' do
     context 'with the defaults' do
       it 'creates the json' do
-        exec('cat ./spec/data.csv | ./csv2table --json > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 --json > ./output.txt')
 
         contents_the_same('data.json')
       end
@@ -26,7 +26,7 @@ describe 'json output' do
 
     context 'delimiter is ,' do
       it 'creates the json' do
-        exec('cat ./spec/data.csv | ./csv2table --json -delimit , > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 --json -delimit , > ./output.txt')
 
         contents_the_same('data.json')
       end
@@ -34,7 +34,7 @@ describe 'json output' do
 
     context 'delimiter is tab' do
       it 'creates the json' do
-        exec('cat ./spec/data.tsv | ./csv2table --json -delimit "\t" > ./output.txt')
+        exec('cat ./spec/data.tsv | ./csv2 --json -delimit "\t" > ./output.txt')
 
         contents_the_same('data.json')
       end
@@ -44,7 +44,7 @@ describe 'json output' do
   context 'as argument' do
     context 'with the defaults' do
       it 'creates the json' do
-        exec('./csv2table --json ./spec/data.csv > ./output.txt')
+        exec('./csv2 --json ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.json')
       end
@@ -52,7 +52,7 @@ describe 'json output' do
 
     context 'delimiter is ,' do
       it 'creates the json' do
-        exec('./csv2table -delimit , --json ./spec/data.csv > ./output.txt')
+        exec('./csv2 -delimit , --json ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.json')
       end
@@ -60,7 +60,7 @@ describe 'json output' do
 
     context 'delimiter is tab' do
       it 'creates the json' do
-        exec('./csv2table -delimit "\t" --json ./spec/data.tsv > ./output.txt')
+        exec('./csv2 -delimit "\t" --json ./spec/data.tsv > ./output.txt')
 
         contents_the_same('data.json')
       end

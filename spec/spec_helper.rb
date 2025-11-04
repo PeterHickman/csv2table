@@ -3,7 +3,7 @@
 require 'English'
 
 def build_program
-  system('go build csv2table.go')
+  system('go build csv2.go')
 end
 
 def remove_file(filename)

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BINARY='/usr/local/bin'
-APP=csv2table
+APP=csv2
 
 echo "Building $APP"
 go build -ldflags="-s -w" $APP.go

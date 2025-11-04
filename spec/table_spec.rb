@@ -8,7 +8,7 @@ describe 'table output' do
   end
 
   after :all do
-    remove_file('csv2table')
+    remove_file('csv2')
   end
 
   after :each do
@@ -18,7 +18,7 @@ describe 'table output' do
   context 'from stdio' do
     context 'with the defaults' do
       it 'creates the table' do
-        exec('cat ./spec/data.csv | ./csv2table > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 > ./output.txt')
 
         contents_the_same('data.txt')
       end
@@ -26,7 +26,7 @@ describe 'table output' do
 
     context 'delimiter is ,' do
       it 'creates the table' do
-        exec('cat ./spec/data.csv | ./csv2table -delimit , > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 -delimit , > ./output.txt')
 
         contents_the_same('data.txt')
       end
@@ -34,7 +34,7 @@ describe 'table output' do
 
     context 'delimiter is tab' do
       it 'creates the table' do
-        exec('cat ./spec/data.tsv | ./csv2table -delimit "\t" > ./output.txt')
+        exec('cat ./spec/data.tsv | ./csv2 -delimit "\t" > ./output.txt')
 
         contents_the_same('data.txt')
       end
@@ -44,7 +44,7 @@ describe 'table output' do
   context 'as argument' do
     context 'with the defaults' do
       it 'creates the table' do
-        exec('./csv2table ./spec/data.csv > ./output.txt')
+        exec('./csv2 ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.txt')
       end
@@ -52,7 +52,7 @@ describe 'table output' do
 
     context 'delimiter is ,' do
       it 'creates the table' do
-        exec('./csv2table -delimit , ./spec/data.csv > ./output.txt')
+        exec('./csv2 -delimit , ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.txt')
       end
@@ -60,7 +60,7 @@ describe 'table output' do
 
     context 'delimiter is tab' do
       it 'creates the table' do
-        exec('./csv2table -delimit "\t" ./spec/data.tsv > ./output.txt')
+        exec('./csv2 -delimit "\t" ./spec/data.tsv > ./output.txt')
 
         contents_the_same('data.txt')
       end

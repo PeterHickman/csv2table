@@ -8,7 +8,7 @@ describe 'markdown output' do
   end
 
   after :all do
-    remove_file('csv2table')
+    remove_file('csv2')
   end
 
   after :each do
@@ -18,7 +18,7 @@ describe 'markdown output' do
   context 'from stdio' do
     context 'with the defaults' do
       it 'creates the markdown' do
-        exec('cat ./spec/data.csv | ./csv2table --md > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 --md > ./output.txt')
 
         contents_the_same('data.md')
       end
@@ -26,7 +26,7 @@ describe 'markdown output' do
 
     context 'delimiter is ,' do
       it 'creates the markdown' do
-        exec('cat ./spec/data.csv | ./csv2table --md -delimit , > ./output.txt')
+        exec('cat ./spec/data.csv | ./csv2 --md -delimit , > ./output.txt')
 
         contents_the_same('data.md')
       end
@@ -34,7 +34,7 @@ describe 'markdown output' do
 
     context 'delimiter is tab' do
       it 'creates the markdown' do
-        exec('cat ./spec/data.tsv | ./csv2table --md -delimit "\t" > ./output.txt')
+        exec('cat ./spec/data.tsv | ./csv2 --md -delimit "\t" > ./output.txt')
 
         contents_the_same('data.md')
       end
@@ -44,7 +44,7 @@ describe 'markdown output' do
   context 'as argument' do
     context 'with the defaults' do
       it 'creates the markdown' do
-        exec('./csv2table --md ./spec/data.csv > ./output.txt')
+        exec('./csv2 --md ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.md')
       end
@@ -52,7 +52,7 @@ describe 'markdown output' do
 
     context 'delimiter is ,' do
       it 'creates the markdown' do
-        exec('./csv2table -delimit , --md ./spec/data.csv > ./output.txt')
+        exec('./csv2 -delimit , --md ./spec/data.csv > ./output.txt')
 
         contents_the_same('data.md')
       end
@@ -60,7 +60,7 @@ describe 'markdown output' do
 
     context 'delimiter is tab' do
       it 'creates the markdown' do
-        exec('./csv2table -delimit "\t" --md ./spec/data.tsv > ./output.txt')
+        exec('./csv2 -delimit "\t" --md ./spec/data.tsv > ./output.txt')
 
         contents_the_same('data.md')
       end
