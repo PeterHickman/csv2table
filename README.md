@@ -5,16 +5,9 @@
 
 Convert a csv file into either a nice ascii table, a markdown table or json
 
-```bash
-$ cat data.csv | csv2
-| first_name | last_name | username |
-+------------+-----------+----------+
-| Rob        | Pike      | rob      |
-| Ken        | Thompson  | ken      |
-| Robert     | Griesemer | gri      |
-```
-
 We are assuming that the first line of the file is the column names. The default the delimiter is a `,` but if you need to change it pass `--delimit '\t'` to use a tab (for example)
+
+Can be used as a pipe too
 
 
 ## `csv2 --table data.csv` or `csv2 data.csv` as table is the default
@@ -37,7 +30,7 @@ We are assuming that the first line of the file is the column names. The default
   |Robert|Griesemer|gri|
 ```
 
-## `csv2 --json`
+## `csv2 --json data.csv`
 
 ```json
   [
