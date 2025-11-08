@@ -14,6 +14,7 @@ import (
 
 var delimiter = ','
 var output = "unset"
+var names []string
 
 func dropdead(message string) {
 	fmt.Println(message)
@@ -87,39 +88,82 @@ func open_reader() io.Reader {
 	return in
 }
 
+func table_line(record []string, widths []int) {
+	s := "|"
+	for i := 0; i < len(record); i++ {
+		s += fmt.Sprintf(" %-*s ", widths[i], record[i])
+		s += "|"
+	}
+	fmt.Println(s)
+}
+
+func table_header(widths []int) {
+	s := "+"
+	for i := 0; i < len(widths); i++ {
+		s += strings.Repeat("-", widths[i]+2)
+		s += "+"
+	}
+	fmt.Println(s)
+}
+
+func are_names_defined(record_size int) bool {
+	if len(names) > 0 {
+		if len(names) == record_size {
+			return true
+		} else {
+			dropdead(fmt.Sprintf("The --name option defined %d columns, the data has %d", len(names), record_size))
+		}
+	}
+
+	return false
+}
+
 func write_table(records [][]string) {
 	widths := field_widths(records)
 
-	number_of_fields := len(records[0])
+	use_names := are_names_defined(len(widths))
 
 	for ri, record := range records {
-		s := "|"
-		for i := 0; i < number_of_fields; i++ {
-			s += fmt.Sprintf(" %-*s ", widths[i], record[i])
-			s += "|"
-		}
-		fmt.Println(s)
-
-		// A seperator line after the heading
 		if ri == 0 {
-			s := "+"
-			for i := 0; i < number_of_fields; i++ {
-				s += strings.Repeat("-", widths[i]+2)
-				s += "+"
+			if use_names {
+				table_line(names, widths)
+				table_header(widths)
+				table_line(record, widths)
+			} else {
+				table_line(record, widths)
+				table_header(widths)
 			}
-			fmt.Println(s)
+		} else {
+			table_line(record, widths)
 		}
 	}
 }
 
-func write_md(records [][]string) {
-	for ri, record := range records {
-		s := "|" + strings.Join(record, "|") + "|"
-		fmt.Println(s)
+func md_line(record []string) {
+	s := "|" + strings.Join(record, "|") + "|"
+	fmt.Println(s)
+}
 
+func md_headers(record []string) {
+	s := "|" + strings.Repeat("---|", len(record))
+	fmt.Println(s)
+}
+
+func write_md(records [][]string) {
+	use_names := are_names_defined(len(records[0]))
+
+	for ri, record := range records {
 		if ri == 0 {
-			s := "|" + strings.Repeat("---|", len(record))
-			fmt.Println(s)
+			if use_names {
+				md_line(names)
+				md_headers(record)
+				md_line(record)
+			} else {
+				md_line(record)
+				md_headers(record)
+			}
+		} else {
+			md_line(record)
 		}
 	}
 }
@@ -173,8 +217,16 @@ func format_value(value string) string {
 }
 
 func write_json(records [][]string) {
+	are_names_defined(len(records[0]))
+
 	last_record_index := len(records) - 1
 	last_field_index := len(records[0]) - 1
+
+	var headers = records[0]
+
+	if len(names) > 0 {
+		headers = names
+	}
 
 	fmt.Println("[")
 
@@ -184,9 +236,9 @@ func write_json(records [][]string) {
 
 			for i, value := range record {
 				if i == last_field_index {
-					fmt.Printf("    \"%s\": %s\n", records[0][i], format_value(value))
+					fmt.Printf("    \"%s\": %s\n", headers[i], format_value(value))
 				} else {
-					fmt.Printf("    \"%s\": %s,\n", records[0][i], format_value(value))
+					fmt.Printf("    \"%s\": %s,\n", headers[i], format_value(value))
 				}
 			}
 
@@ -206,6 +258,7 @@ func init() {
 	t := flag.Bool("table", false, "Format the output as an ascii table")
 	m := flag.Bool("md", false, "Format the output as markdown")
 	j := flag.Bool("json", false, "Format the output as json")
+	n := flag.String("names", "", "Optional column headers when the file has none. Seperate with commas")
 
 	flag.Parse()
 
@@ -246,6 +299,10 @@ func init() {
 
 	if output == "unset" {
 		output = "table"
+	}
+
+	if *n != "" {
+		names = strings.Split(*n, ",")
 	}
 }
 
