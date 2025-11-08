@@ -1,0 +1,22 @@
+[
+  {
+    "first": "a word",
+    "second": "work"
+  },
+  {
+    "first": "several words",
+    "second": "this is also a sentence"
+  },
+  {
+    "first": true,
+    "second": true
+  },
+  {
+    "first": false,
+    "second": false
+  },
+  {
+    "first": null,
+    "second": null
+  }
+]

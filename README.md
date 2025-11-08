@@ -9,6 +9,7 @@ We are assuming that the first line of the file is the column names. The default
 
 Can be used as a pipe too
 
+If you want to use different column names use `--names tom,dick,harry`. The existing columns will be ignored and the supplied names used
 
 ## `csv2 --table data.csv` or `csv2 data.csv` as table is the default
 
