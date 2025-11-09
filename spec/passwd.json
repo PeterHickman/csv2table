@@ -1,0 +1,47 @@
+[
+  {
+    "username": "nobody",
+    "password": "*",
+    "uid": -2,
+    "gid": -2,
+    "gecos": "Unprivileged User",
+    "home": "/var/empty",
+    "shell": "/usr/bin/false"
+  },
+  {
+    "username": "root",
+    "password": "*",
+    "uid": 0,
+    "gid": 0,
+    "gecos": "System Administrator",
+    "home": "/var/root",
+    "shell": "/bin/sh"
+  },
+  {
+    "username": "daemon",
+    "password": "*",
+    "uid": 1,
+    "gid": 1,
+    "gecos": "System Services",
+    "home": "/var/root",
+    "shell": "/usr/bin/false"
+  },
+  {
+    "username": "_uucp",
+    "password": "*",
+    "uid": 4,
+    "gid": 4,
+    "gecos": "Unix to Unix Copy Protocol",
+    "home": "/var/spool/uucp",
+    "shell": "/usr/sbin/uucico"
+  },
+  {
+    "username": "_lp",
+    "password": "*",
+    "uid": 26,
+    "gid": 26,
+    "gecos": "Printing Services",
+    "home": "/var/spool/cups",
+    "shell": "/usr/bin/false"
+  }
+]
