@@ -15,6 +15,7 @@ import (
 var delimiter = ','
 var output = "unset"
 var names []string
+var nonames = false
 
 func dropdead(message string) {
 	fmt.Println(message)
@@ -46,6 +47,14 @@ func first_read_of_the_date(in io.Reader) [][]string {
 
 func field_widths(records [][]string) []int {
 	widths := make([]int, len(records[0]))
+
+	if len(names) > 0 {
+		for i := 0; i < len(names); i++ {
+			if widths[i] < len(names[i]) {
+				widths[i] = len(names[i])
+			}
+		}
+	}
 
 	for _, record := range records {
 		for i := 0; i < len(record); i++ {
@@ -222,16 +231,22 @@ func write_json(records [][]string) {
 	last_record_index := len(records) - 1
 	last_field_index := len(records[0]) - 1
 
-	var headers = records[0]
+	var headers []string
+	first_row := 1
 
-	if len(names) > 0 {
+	if nonames {
 		headers = names
+		first_row = 0
+	} else if len(names) > 0 {
+		headers = names
+	} else {
+		headers = records[0]
 	}
 
 	fmt.Println("[")
 
 	for ri, record := range records {
-		if ri != 0 {
+		if ri >= first_row {
 			fmt.Println("  {")
 
 			for i, value := range record {
@@ -259,6 +274,7 @@ func init() {
 	m := flag.Bool("md", false, "Format the output as markdown")
 	j := flag.Bool("json", false, "Format the output as json")
 	n := flag.String("names", "", "Optional column headers when the file has none. Seperate with commas")
+	x := flag.Bool("nonames", false, "When the csv file does not have column names, use with --names")
 
 	flag.Parse()
 
@@ -303,6 +319,14 @@ func init() {
 
 	if *n != "" {
 		names = strings.Split(*n, ",")
+	}
+
+	if *x {
+		if len(names) == 0 {
+			dropdead("File has no column names, via --nonames, but no names supplied, via --names")
+		} else {
+			nonames = true
+		}
 	}
 }
 
